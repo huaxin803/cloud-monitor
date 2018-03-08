@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: qrpay-monitor
+info:
+  component: 微服务监控中心
+logging:
+  level:
+    root: info

@@ -1,0 +1,67 @@
+group 'com.jyall'
+version '0.0.1-SNAPSHOT'
+
+buildscript {
+    ext {
+        springBootVersion = '1.5.4.RELEASE'
+        jyallRepoBase = "http://10.10.10.60:8081/nexus/content"
+        springCloudVersion = 'Dalston.SR1'
+    }
+    repositories {
+        maven {url "${jyallRepoBase}/groups/public" }
+        mavenCentral()
+        maven {url "https://plugins.gradle.org/m2/"}
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.2.1'
+    }
+    configurations {
+        compile.exclude module: "spring-boot-starter-tomcat"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: "org.springframework.boot"
+apply plugin: 'org.sonarqube'
+apply plugin: "io.spring.dependency-management"
+
+jar {
+    baseName = rootProject.name
+
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven { url "http://10.10.10.60:8081/nexus/content/groups/public" }
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-undertow'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-logging'
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka-server'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'de.codecentric:spring-boot-admin-server:1.5.2'
+    compile 'de.codecentric:spring-boot-admin-server-ui:1.5.2'
+    compile 'com.alibaba:fastjson:1.2.31'
+    compile 'org.elasticsearch.client:rest:5.3.1'
+    compile 'org.elasticsearch.client:sniffer:5.3.1'
+    compile 'com.hazelcast:hazelcast:3.8.2'
+    compile 'com.github.binarywang:weixin-java-cp:2.7.8'
+    compile "org.springframework.cloud:spring-cloud-starter-feign"
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}

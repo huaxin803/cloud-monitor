@@ -1,0 +1,86 @@
+server:
+  port: 80
+eureka:
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 10
+    LeaseExpirationDurationInSeconds: 30
+    instanceId: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    registryFetchIntervalSeconds: 5
+    eurekaServiceUrlPollIntervalSeconds: 300
+    instanceInfoReplicationIntervalSeconds: 60
+    registerWithEureka: true
+    fetchRegistry: true
+    healthcheck:
+      enabled: false
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
+spring:
+  boot:
+    admin:
+      monitor:
+        period: 10000
+        status-lifetime: 10000
+        connect-timeout: 5000
+        read-timeout: 20000
+      discovery:
+        enabled: true
+        ignored-services: qrpay-monitor,f*-jy*,b*-jy*,is-jy*,bc-*,is-common-*,is-user-*,bs-m*,bs-common*,ic-*,bs-user*,bs-dw*,bs-ehr*
+      routes:
+        endpoints: env, metrics, trace, dump, info, configprops, activiti, refresh, loggers, activiti
+management:
+  security:
+    enabled: false
+feign:
+  hystrix:
+    enabled: false
+faizel:
+  notify:
+    reminderStatuses: DOWN, OFFLINE, UP
+    reminderPeriod: 1
+  restTemplate:
+    requestTimeOut: 3000
+    connectionTimeOut: 3000
+    readTimeOut: 20000
+  es:
+    clusterNodes: 192.168.60.23:9200,192.168.60.24:9200,192.168.60.25:9200,192.168.60.26:9200,192.168.60.27:9200
+    user: elastic
+    password: changeme
+    socketTimeOut: 15000
+    connectTimeOut: 10000
+    maxRetryTimeoutMillis: 15000
+    threadCount: 100
+    sniffRequestTimeOut: 5000
+    schema: http
+    sniffIntervalMillis: 300000
+    sniffAfterFailureDelayMillis: 60000
+    indexBeansPath: com.jyall
+    scanNestedJar: qrpay-domain
+    index: testqrpay-node-monitor
+    type: status
+  hazelCast:
+    port: 5701
+    multiCast: false
+    members: 192.168.51.240:5702
+    mapName: application-store
+    mapBackUp: 1
+    listName: event-store
+    listBackUp: 1
+    listMaxSize: 2000
+  sms:
+    autoSmsUrl: true
+    #中间不准有空格
+    sendMobiles: 17854284374
+    smsModel: 81
+    eurekaSign: S
+    smsUrl: http://10.10.33.55:80/v1/sms/multiple/, http://10.10.33.55:80/v1/sms/multiple/
+ribbon:
+  ReadTimeout: 30000
+  ConnectTimeout: 20000
+wechat:
+  cp:
+    corpId: wx78c8d09ea21c8884
+    secret: JOalzzD0faFFwGdTX90M0IuDpLapVxr5Bpd4W5lvspc
+    agentId: 1000006
+    toTag: 2
